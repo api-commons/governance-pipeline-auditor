@@ -1,0 +1,53 @@
+name: Governance Pipeline Auditor
+description: Audit a repo's Spectral API-governance CI setup against an 8-point maturity rubric and gate on the score.
+author: API Commons
+branding:
+  icon: check-circle
+  color: yellow
+inputs:
+  path:
+    description: Path to the repository to audit.
+    required: false
+    default: '.'
+  min-score:
+    description: Fail the job if the maturity score is below this (0-8). Empty to never fail.
+    required: false
+    default: ''
+  version:
+    description: npm dist-tag or version of @api-common/governance-pipeline-auditor to run.
+    required: false
+    default: 'latest'
+  html:
+    description: Also write a self-contained HTML report to this path (empty to skip).
+    required: false
+    default: ''
+runs:
+  using: composite
+  steps:
+    - name: Audit the governance pipeline
+      id: audit
+      shell: bash
+      run: |
+        set -uo pipefail
+        CLI="@api-common/governance-pipeline-auditor@${{ inputs.version }}"
+        ARGS=("${{ inputs.path }}" "--summary" "$GITHUB_STEP_SUMMARY")
+        if [ -n "${{ inputs.min-score }}" ]; then
+          ARGS+=("--min-score" "${{ inputs.min-score }}")
+        fi
+        if [ -n "${{ inputs.html }}" ]; then
+          ARGS+=("--html" "${{ inputs.html }}")
+        fi
+        # Prints the human report to the log, appends Markdown to the job summary,
+        # writes optional HTML, and exits non-zero when below --min-score.
+        npx -y "$CLI" "${ARGS[@]}"
+    - name: Governance services
+      if: always()
+      shell: bash
+      run: |
+        {
+          echo ""
+          echo "---"
+          echo "Want help climbing the rubric — an owned ruleset, a security layer, PR-time gating, or a governance report? **API Evangelist** does the work alongside you."
+          echo ""
+          echo "📧 **info@apievangelist.com** &middot; [Governance services →](https://apievangelist.com/services/)"
+        } >> "$GITHUB_STEP_SUMMARY"

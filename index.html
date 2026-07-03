@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Governance Pipeline Auditor — lint your linting</title>
+    <meta name="description" content="Audit a repo's Spectral API-governance CI setup against an 8-point maturity rubric and get a prioritized punch-list of fixes. The sequel to Spectral Reporter — that reports on your API, this reports on your pipeline. An API Commons tool, free and open." />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <!-- Google tag (gtag.js) — API Commons -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WNSPT4B4S8"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-WNSPT4B4S8');
+    </script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <img src="/favicon.svg" alt="" width="24" height="24" />
+        <strong>Governance Pipeline Auditor</strong>
+        <span class="tag">auditor.apicommons.org</span>
+      </div>
+      <nav>
+        <a href="#demo">Live demo</a>
+        <a href="#rubric">Rubric</a>
+        <a href="#usage">Usage</a>
+        <a href="https://apicommons.org/tools/" target="_blank" rel="noopener">API Commons</a>
+        <a class="btn-yellow" href="https://github.com/api-commons/governance-pipeline-auditor" target="_blank" rel="noopener">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+          GitHub
+        </a>
+        <button id="engage-ae" class="btn-yellow" type="button" title="Work with API Evangelist on governance">Get Help</button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-inner">
+          <h1>Lint your linting.</h1>
+          <p class="lede">
+            <strong>Governance Pipeline Auditor</strong> scans a repo’s
+            <a href="https://github.com/stoplightio/spectral" target="_blank" rel="noopener">Spectral</a>
+            API-governance CI setup and scores it against an <strong>8-point maturity rubric</strong> — then hands back a
+            <strong>prioritized punch-list</strong> of concrete fixes. It’s the sequel to
+            <a href="https://reporter.apicommons.org" target="_blank" rel="noopener">Spectral Reporter</a>:
+            that reports on your API, <em>this reports on your pipeline</em>. The rubric comes straight from the
+            API Evangelist paper <em>“The State of Spectral in API Pipelines,”</em> a census of 1,005 real public pipelines.
+          </p>
+          <div class="hero-cta">
+            <a class="btn-yellow big" href="#demo">Try the live demo ↓</a>
+            <a class="btn-outline big" href="#usage">Install &amp; usage</a>
+          </div>
+          <pre class="hero-cmd"><code>npx @api-common/governance-pipeline-auditor . --min-score 5</code></pre>
+        </div>
+      </section>
+
+      <section class="features">
+        <div class="feature">
+          <h3>8-point rubric</h3>
+          <p>Gates the PR · custom ruleset · owned home · pinned tooling · security layer · real gate · path-filtered · machine-readable report.</p>
+        </div>
+        <div class="feature">
+          <h3>Prioritized punch-list</h3>
+          <p>Every failed signal becomes a concrete fix, ordered by governance impact, each with a one-line why and a docs link.</p>
+        </div>
+        <div class="feature">
+          <h3>Gate on the score</h3>
+          <p>A composite GitHub Action writes the score to your job summary and fails the build under <code>--min-score</code>.</p>
+        </div>
+        <div class="feature">
+          <h3>Anti-pattern flags</h3>
+          <p>Calls out the specific smells from the paper — default ruleset, <code>@latest</code>, lint-after-merge, toothless <code>continue-on-error</code>.</p>
+        </div>
+      </section>
+
+      <section id="demo" class="demo">
+        <div class="demo-head">
+          <h2>Live demo</h2>
+          <p>Paste your <code>.github/workflows/*.yml</code> that runs Spectral (and, optionally, your <code>.spectral.yaml</code> ruleset), then score it — all in your browser, with the exact scorer the CLI uses.</p>
+        </div>
+        <div class="demo-grid">
+          <div class="demo-input">
+            <div class="demo-bar">
+              <button id="load-good" class="btn-outline" type="button">Load good sample</button>
+              <button id="load-bad" class="btn-outline" type="button">Load bad sample</button>
+              <span class="spacer"></span>
+              <button id="audit" class="btn-yellow" type="button">Audit pipeline →</button>
+            </div>
+            <p class="field-label">Workflow YAML</p>
+            <textarea id="workflow" spellcheck="false" placeholder="Paste a .github/workflows/*.yml that runs Spectral…"></textarea>
+            <p class="field-label">Ruleset (optional)</p>
+            <textarea id="ruleset" spellcheck="false" placeholder="Paste your .spectral.yaml ruleset (optional)…"></textarea>
+            <p id="demo-status" class="demo-status muted"></p>
+          </div>
+          <div class="demo-output">
+            <div class="demo-bar">
+              <span class="preview-label">Audit preview</span>
+            </div>
+            <iframe id="preview" title="Audit preview" sandbox="allow-scripts"></iframe>
+          </div>
+        </div>
+      </section>
+
+      <section id="rubric" class="usage">
+        <h2>The 8-point rubric</h2>
+        <p class="muted">One point per signal. It deliberately measures only the mechanical surface a workflow file exposes — the automatable quarter of governance. It says nothing about whether a human wrote the rules on purpose.</p>
+        <table class="rubric">
+          <thead><tr><th>Signal</th><th>Question it answers</th></tr></thead>
+          <tbody>
+            <tr><td>Gates the PR</td><td>Does governance fire before the merge, not after?</td></tr>
+            <tr><td>Custom ruleset</td><td>Are the rules the organization’s, not the tool’s defaults?</td></tr>
+            <tr><td>Owned ruleset home</td><td>Do the rules live in a dedicated dir or a shared/remote source?</td></tr>
+            <tr><td>Pinned tooling</td><td>Is the enforcing tool pinned to a chosen version (SHA)?</td></tr>
+            <tr><td>Security layer</td><td>Are OWASP/security rules present, not just style?</td></tr>
+            <tr><td>Real gate</td><td>Does it fail the build on error rather than only annotate?</td></tr>
+            <tr><td>Path-filtered</td><td>Does it run only when the spec/ruleset changes?</td></tr>
+            <tr><td>Machine-readable report</td><td>Does it emit SARIF / a readable report / PR comment?</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="usage" class="usage">
+        <h2>Install &amp; usage</h2>
+
+        <h3>Run it now (no install)</h3>
+        <pre><code># Audit the current repo and print the score + punch-list
+npx @api-common/governance-pipeline-auditor .
+
+# Short alias, JSON output, and a gate
+npx @api-common/governance-pipeline-auditor . --json
+npx @api-common/governance-pipeline-auditor . --min-score 5
+
+# Write a self-contained HTML report
+npx @api-common/governance-pipeline-auditor . --html governance-audit.html</code></pre>
+
+        <h3>Install as a dev dependency</h3>
+        <pre><code>npm install --save-dev @api-common/governance-pipeline-auditor</code></pre>
+
+        <h3>Flags</h3>
+        <ul class="flags">
+          <li><code>--json</code> — print the full audit as JSON</li>
+          <li><code>--html &lt;file&gt;</code> — write a self-contained HTML report</li>
+          <li><code>--summary &lt;file&gt;</code> — append a Markdown summary (for CI / <code>$GITHUB_STEP_SUMMARY</code>)</li>
+          <li><code>--min-score &lt;N&gt;</code> — exit non-zero if the score is below N (gate a pipeline)</li>
+        </ul>
+
+        <h3>In GitHub Actions</h3>
+        <pre><code>- uses: api-commons/governance-pipeline-auditor@v1
+  with:
+    path: .
+    min-score: 5      # fail the job below 5/8
+    html: governance-audit.html
+- uses: actions/upload-artifact@v4
+  with:
+    name: governance-audit
+    path: governance-audit.html</code></pre>
+
+        <p class="usage-foot">
+          The scorer is a pure, dependency-free function shared verbatim between the CLI, the Action, and this page —
+          so the score you see here is byte-for-byte what CI produces.
+          Free and open under the <a href="https://github.com/api-commons/governance-pipeline-auditor" target="_blank" rel="noopener">Apache-2.0 license</a>.
+          When you want experts in the loop, <button id="engage-inline" class="linkish" type="button">work with API Evangelist</button>.
+        </p>
+      </section>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-tools">
+        <span class="foot-title">API Commons tools</span>
+        <a href="https://validator.apicommons.org" target="_blank" rel="noopener">API Validator</a>
+        <a href="https://discover.apicommons.org" target="_blank" rel="noopener">API Discovery</a>
+        <a href="https://documentation.apicommons.org" target="_blank" rel="noopener">API Documentation</a>
+        <a href="https://reusability.apicommons.org" target="_blank" rel="noopener">API Reusability</a>
+        <a href="https://install.apicommons.org" target="_blank" rel="noopener">MCP Install</a>
+        <a href="https://reporter.apicommons.org" target="_blank" rel="noopener">Spectral Reporter</a>
+        <a href="https://auditor.apicommons.org" class="current">Governance Pipeline Auditor</a>
+      </div>
+      <p class="foot-note">
+        A project of <a href="https://apievangelist.com" target="_blank" rel="noopener">API Evangelist</a>,
+        maintained openly under <a href="https://apicommons.org" target="_blank" rel="noopener">API Commons</a>.
+        Open source and free to fork; API Evangelist offers expert
+        <a href="https://apievangelist.com/services/" target="_blank" rel="noopener">governance services</a> when you want help.
+      </p>
+    </footer>
+
+    <script type="module" src="/src/site.ts"></script>
+  </body>
+</html>

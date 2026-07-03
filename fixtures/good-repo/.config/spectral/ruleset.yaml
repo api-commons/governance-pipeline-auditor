@@ -1,0 +1,25 @@
+# An owned ruleset, versioned in a dedicated home, extending a shared/remote
+# organizational baseline. Every rule carries a documentationUrl so a red build
+# teaches instead of just stops.
+extends:
+  - https://raw.githubusercontent.com/example-gov/api-guidelines/v2.3.0/spectral.yaml
+  - '@stoplight/spectral-owasp-ruleset'
+documentationUrl: https://apis.example-gov.org/governance/rules
+rules:
+  operation-operationId:
+    description: Every operation must carry a unique operationId.
+    documentationUrl: https://apis.example-gov.org/governance/rules#operationId
+    severity: error
+    given: $.paths[*][*]
+    then:
+      field: operationId
+      function: truthy
+  operation-description-meaningful:
+    description: Operations must have a meaningful (>= 20 char) description.
+    documentationUrl: https://apis.example-gov.org/governance/rules#descriptions
+    severity: warn
+    given: $.paths[*][*].description
+    then:
+      function: length
+      functionOptions:
+        min: 20

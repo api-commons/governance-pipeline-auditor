@@ -1,0 +1,63 @@
+{
+  "name": "@api-common/governance-pipeline-auditor",
+  "version": "0.1.0",
+  "description": "Lint your linting: audit a repo's API-governance CI setup against an 8-point maturity rubric and get a prioritized punch-list of fixes. The sequel to spectral-reporter. An API Commons tool.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "author": "API Evangelist (https://apievangelist.com)",
+  "homepage": "https://auditor.apicommons.org",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/api-commons/governance-pipeline-auditor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/api-commons/governance-pipeline-auditor/issues"
+  },
+  "keywords": [
+    "spectral",
+    "api-governance",
+    "ci",
+    "github-actions",
+    "pipeline",
+    "linting",
+    "maturity",
+    "audit",
+    "api-commons"
+  ],
+  "bin": {
+    "governance-pipeline-auditor": "bin/cli.js",
+    "gpa": "bin/cli.js"
+  },
+  "exports": {
+    ".": "./src/audit.js",
+    "./report": "./src/report-html.js"
+  },
+  "files": [
+    "bin/",
+    "src/audit.js",
+    "src/report-html.js",
+    "src/collect.js",
+    "action.yml",
+    "fixtures/",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node --test",
+    "dev": "vite",
+    "build:site": "vite build",
+    "build": "vite build",
+    "preview": "vite preview",
+    "cli": "node bin/cli.js"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2",
+    "vite": "^5.4.11"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

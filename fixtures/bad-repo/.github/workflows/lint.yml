@@ -1,0 +1,17 @@
+# The median pipeline in the corpus: turned on, defaulted, floating, ungated,
+# and toothless. Scores 0/8 against the maturity rubric.
+name: lint
+on:
+  push:
+    branches: [main]
+jobs:
+  spectral:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Floating @latest — the enforcer can change under you overnight.
+      # No ruleset input, so Spectral runs its default/implicit ruleset.
+      # continue-on-error makes the whole step decorative.
+      - name: Spectral
+        uses: stoplightio/spectral-action@latest
+        continue-on-error: true
