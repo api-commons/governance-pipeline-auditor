@@ -171,3 +171,5 @@ Evangelist offers expert [governance services](https://apievangelist.com/service
 — pipelines, rulesets, reviews, and policy — when you want experts in the loop.
 
 Licensed under [Apache-2.0](LICENSE).
+
+**Governance guidance** — the human *why* behind this tool: [Pipeline Maturity](https://guidance.apievangelist.com/store/pipeline-maturity/) at guidance.apievangelist.com.
