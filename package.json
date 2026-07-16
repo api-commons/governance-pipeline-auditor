@@ -1,6 +1,6 @@
 {
   "name": "@api-common/governance-pipeline-auditor",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Lint your linting: audit a repo's API-governance CI setup against an 8-point maturity rubric and get a prioritized punch-list of fixes. The sequel to spectral-reporter. An API Commons tool.",
   "type": "module",
   "license": "Apache-2.0",

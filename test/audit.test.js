@@ -95,3 +95,23 @@ test('maturityFor bands match the paper', () => {
   assert.equal(maturityFor(2).label, 'Thin');
   assert.equal(maturityFor(0).label, 'Nominal');
 });
+
+test('a remote/shared ruleset credits BOTH custom-ruleset and owned-home', () => {
+  // The italia/api-oas-checker pattern: no local ruleset file — a workflow that
+  // curls a national/shared ruleset and lints against it. This is a deliberate
+  // governance decision, so both ownership signals must pass (regression: the
+  // scorer used to credit owned-home but fail custom-ruleset on the same input).
+  const wf = [
+    'on:',
+    '  pull_request:',
+    'jobs:',
+    '  lint:',
+    '    steps:',
+    '      - run: curl -sSfL https://raw.githubusercontent.com/italia/api-oas-checker/master/spectral.yml -o spectral.yml',
+    '      - run: spectral lint -r spectral.yml openapi.yaml',
+  ].join('\n');
+  const audit = auditRepo([{ name: '.github/workflows/api-check.yml', content: wf, kind: 'workflow' }]);
+  const byId = Object.fromEntries(audit.signals.map((s) => [s.id, s.pass]));
+  assert.equal(byId['custom-ruleset'], true, 'remote ruleset counts as custom');
+  assert.equal(byId['owned-home'], true, 'remote ruleset counts as an owned home');
+});

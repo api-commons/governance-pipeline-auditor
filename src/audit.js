@@ -191,20 +191,32 @@ export function auditRepo(files, options = {}) {
   // ---- evaluate each signal -------------------------------------------------
   const evals = {};
 
+  // A remote/shared ruleset (extends URL, or a curl/wget of a ruleset) is BOTH a
+  // custom ruleset and an owned home — a national/shared ruleset like Italy's
+  // api-oas-checker is the strongest governance decision a team can make, not a
+  // weaker one. Detect it once and credit it in both signals.
+  const remoteRuleset = (has(rs, /extends\s*:/i) && grep(rs, /https?:\/\/\S+/i))
+    || grep(wf, /extends\s*:\s*\n?\s*-?\s*['"]?https?:\/\//i)
+    || grep(wf, /(curl|wget)[^\n]*(spectral|ruleset)/i)
+    || grep(wf, /(curl|wget)[^\n]*https?:\/\/[^\n]*\.(ya?ml|json|js)\b/i);
+
   // (1) Gates the PR — trigger includes pull_request.
   evals['gates-pr'] = (() => {
     const ev = grep(wf, /\bpull_request\b/);
     return { pass: !!ev, evidence: ev };
   })();
 
-  // (2) Custom ruleset — an explicit ruleset reference, or a ruleset file present.
+  // (2) Custom ruleset — an explicit ruleset reference, a ruleset file present,
+  // or a remote/shared ruleset (which is a deliberate choice, not the defaults).
   evals['custom-ruleset'] = (() => {
     const refRe = /--ruleset|spectral_ruleset\s*:|(^|\s)-r\s+\S*spectral|\bruleset\s*:\s*\S/im;
     const evRef = grep(wf, refRe);
     if (rulesets.length) {
       return { pass: true, evidence: `ruleset file: ${rulesets[0].name || '(unnamed)'}` };
     }
-    return { pass: !!evRef, evidence: evRef };
+    if (evRef) return { pass: true, evidence: evRef };
+    if (remoteRuleset) return { pass: true, evidence: `remote/shared ruleset: ${remoteRuleset}` };
+    return { pass: false, evidence: null };
   })();
 
   // (3) Owned ruleset home — dedicated dir, or a remote/shared extends URL.
@@ -212,10 +224,7 @@ export function auditRepo(files, options = {}) {
     const dirEv = grep(allNames, /\.config\/spectral|tools\/spectral|rulesets?\//i)
       || grep(wf, /\.config\/spectral|tools\/spectral|rulesets?\//i);
     if (dirEv) return { pass: true, evidence: dirEv };
-    const remoteExtends = (has(rs, /extends\s*:/i) && grep(rs, /https?:\/\/\S+/i))
-      || grep(wf, /extends\s*:\s*\n?\s*-?\s*['"]?https?:\/\//i)
-      || grep(wf, /(curl|wget)\s+\S*spectral/i);
-    return { pass: !!remoteExtends, evidence: remoteExtends };
+    return { pass: !!remoteRuleset, evidence: remoteRuleset };
   })();
 
   // (4) Pinned tooling — spectral-action pinned by 40-char SHA (or CLI exact version).
