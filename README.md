@@ -150,16 +150,17 @@ that is the median row — default ruleset, `@latest`, no PR gate,
 
 ---
 
-## TODOs (for the human who converges this)
+## Part of API Commons
 
-- **GitHub:** create `api-commons/governance-pipeline-auditor`, push, tag `v1`
-  (the Action reference above assumes a `v1` tag / major-version branch).
-- **npm:** publish `@api-common/governance-pipeline-auditor` (scope is
-  **`@api-common`**, singular; `publishConfig.access` is already `public`).
-- **DNS:** point `auditor.apicommons.org` at GitHub Pages (CNAME is committed at
-  the repo root and in `public/`), then enable Pages via the `deploy` workflow.
-- **Cross-linking:** add this tool to the `apicommons.org/tools/` page and to the
-  footer tool list on the sibling tools.
+An open governance tool from **[API Commons](https://apicommons.org)** — a CLI, a GitHub Action, and a browser demo at [auditor.apicommons.org](https://auditor.apicommons.org), free and Apache-2.0. Browse the full set at **[apicommons.org/tools](https://apicommons.org/tools/)**.
+
+**Related tools**
+- [Governance Pipeline](https://github.com/api-commons/governance-pipeline) — the forkable, PR-gated pipeline this audits against
+- [Spectral Reporter](https://reporter.apicommons.org) — Spectral JSON → self-contained HTML report
+- [Governance Baseline](https://baseline.apicommons.org) — adopt governance on a legacy estate; fail only new violations
+- [Governance Coverage](https://coverage.apicommons.org) — how much of your API your rules actually check
+- [Governance Scorecard](https://scorecard.apicommons.org) — the longitudinal health trend of your governance
+- [API Validator](https://validator.apicommons.org) — lint OpenAPI/AsyncAPI/Arazzo/JSON Schema in your browser
 
 ---
 
