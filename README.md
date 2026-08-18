@@ -174,3 +174,10 @@ Evangelist offers expert [governance services](https://apievangelist.com/service
 Licensed under [Apache-2.0](LICENSE).
 
 **Governance guidance** — the human *why* behind this tool: [Pipeline Maturity](https://guidance.apievangelist.com/store/pipeline-maturity/) at guidance.apievangelist.com.
+
+## License
+
+**[Apache-2.0](LICENSE).**
+
+API Commons licenses **code** under Apache-2.0 and **artifacts** — schemas, rulesets,
+examples and API descriptions — under CC BY-NC-SA 4.0.
